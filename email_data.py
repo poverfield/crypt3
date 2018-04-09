@@ -7,10 +7,17 @@ from email.mime.base import MIMEBase
 from email import encoders
 import os
 
+# read in private email information
+f = open('account.txt') # read in account.txt
+f_lines = f.readlines()
+email = f_lines[0].split(': ',1)[1][0:len(f_lines[0].split(': ',1)[1])-1] # email address (send and recieve)
+password = f_lines[1].split(': ',1)[1][0:len(f_lines[1].split(': ',1)[1])-1] # aocapital1@gmail.com password
+f.close()
 
-sender = 'aocapital1@gmail.com'
-receiver = 'aocapital1@gmail.com'
-password = 'lets.get.rich!'
+
+sender = email
+receiver = email
+password = password
 
 
 msg = MIMEMultipart()
