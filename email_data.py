@@ -10,7 +10,7 @@ import os
 
 sender = 'aocapital1@gmail.com'
 receiver = 'aocapital1@gmail.com'
-password = 'A.O.capital!'
+password = 'lets.get.rich!'
 
 
 msg = MIMEMultipart()
