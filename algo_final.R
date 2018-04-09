@@ -24,6 +24,9 @@ df = matrix(data = df, ncol = 8, byrow = FALSE) # recreate data matrix
 colnames(df) = c("time","open","high","low","close","vwap","colume","count")
 df = df[,1:5]
 
+# set directory
+dir = '/home/pi/Desktop/files'
+setwd(dir)
 
 # read in aggregate data
 df_hist = read.csv('xbt_data.csv')
