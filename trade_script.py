@@ -21,7 +21,7 @@ stop_loss = .05
 f = open('account.txt') # read in account.txt
 f_lines = f.readlines()
 email = f_lines[0].split(': ',1)[1][0:len(f_lines[0].split(': ',1)[1])-1] # email address (send and recieve)
-password = f_lines[1].split(': ',1)[1][0:len(f_lines[1].split(': ',1)[1])-1] # aocapital1@gmail.com password
+password = f_lines[1].split(': ',1)[1][0:len(f_lines[1].split(': ',1)[1])-1] # email password
 api_key = f_lines[2].split(': ',1)[1][0:len(f_lines[2].split(': ',1)[1])-1] # kraken api key
 api_secret = f_lines[3].split(': ',1)[1] # kraken api secret
 f.close()
