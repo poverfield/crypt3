@@ -4,6 +4,8 @@
 suppressWarnings(library(quantmod))
 suppressWarnings(library(TTR))
 
+# wait 55 seconds before run
+Sys.sleep(55)
 
 # query data from Kraken
 # download data from Kraken
