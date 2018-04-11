@@ -42,9 +42,10 @@ df_hist = df_hist[,-1]
 id = which(df[,1] == df_hist[nrow(df_hist),1])
 
 if(id > 0){
-  dat = rbind(df_hist, df[id+1,])
+  dat = rbind(df_hist, df[(id+1):nrow(df),])
   write.csv(dat, file = 'xbt_data.csv')
   print(dat[nrow(dat),1] - dat[nrow(dat)-1,1])
+  new_interval = nrow(dat) - nrow(df_hist) # is greater than 1 look back an extra interval in final write of trade_hist.csv
 }
 
 
@@ -155,7 +156,7 @@ trade_hist = as.matrix(trade_hist[,-1])
 
 signal = max(buy,sell)
 trade = matrix(data = 0, ncol = 3, nrow = 1) # create matrix to fill with trade information
-if(signal != nrow(dat)){
+if(signal != nrow(dat) | signal != nrow(dat)-1){ # if signal is not in previous two intervals
   trade = NA
 } else if (signal %in% buy){
   trade[1,1] = as.character(dat[signal,1]) # date
