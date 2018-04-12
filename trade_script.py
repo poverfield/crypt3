@@ -21,16 +21,15 @@ stop_loss = .05
 f = open('account.txt') # read in account.txt
 f_lines = f.readlines()
 email = f_lines[0].split(': ',1)[1][0:len(f_lines[0].split(': ',1)[1])-1] # email address (send and recieve)
-password = f_lines[1].split(': ',1)[1][0:len(f_lines[1].split(': ',1)[1])-1] # email password
+password = f_lines[1].split(': ',1)[1][0:len(f_lines[1].split(': ',1)[1])-1] # aocapital1@gmail.com password
 api_key = f_lines[2].split(': ',1)[1][0:len(f_lines[2].split(': ',1)[1])-1] # kraken api key
 api_secret = f_lines[3].split(': ',1)[1] # kraken api secret
 f.close()
 
 # email
-def email(trade): # function with input 'buy/sell/close'
+def send_email(trade): # function with input 'buy/sell/close'
     sender = email
     receiver = email
-    password = password
 
     msg = MIMEMultipart()
     msg['Subject'] = 'Trade'
@@ -65,6 +64,7 @@ if(trade_sig != prev_sig):
     f = open('current_price.txt')
     f_lines = f.readlines()
     current_date = f_lines[0] # read in date + time intervals
+    current_date = trade_date[0:(len(current_date)-1)] # remove '\n' from current_date
     current_price = float(f_lines[1]) # price
     f.close()
 
@@ -83,7 +83,6 @@ if(trade_sig != prev_sig):
     balance = (kraken.fetch_balance())
     usd = (balance['free'][u'USD'])/2
     vol_open = round((usd/current_price)*.9,4) # volume for new trade after close signal, 90% of available balance rounded to 4 digits
-    vol_open = .002
 
     # volume for opening positions
     if (prev_sig == 'close' and trade_sig != 'close'):
@@ -109,30 +108,30 @@ if(trade_sig != prev_sig):
     if(trade_date == current_date and trade_sig == 'buy'):
         print('buy')
         # use vol
-        # order = kraken.create_market_buy_order ('BTC/USD', vol, {'leverage': 2}) # kraken long position at leverage 2:1
-        email('Buy')
+        order = kraken.create_market_buy_order ('BTC/USD', vol, {'leverage': 2}) # kraken long position at leverage 2:1
+        send_email('Buy')
     # Sell 
     elif(trade_date == current_date and trade_sig == 'sell'):
         print('sell')
         # use vol
-        # order = kraken.create_market_sell_order ('BTC/USD', vol, {'leverage': 2}) # kraken short position at leverage 2:1
-        email('Sell')
+        order = kraken.create_market_sell_order ('BTC/USD', vol, {'leverage': 2}) # kraken short position at leverage 2:1
+        send_email('Sell')
     # Close long 
     elif(current_price > trade_price*(1+take_profit) and trade_sig == 'buy'
          or current_price < trade_price*(1-stop_loss) and trade_sig == 'buy'):
         print('take profit or stop loss')
         vol = vol_close
-        # order = kraken.create_market_sell_order ('BTC/USD', vol, {'leverage': 2}) # close long with equal volume sell
+        order = kraken.create_market_sell_order ('BTC/USD', vol, {'leverage': 2}) # close long with equal volume sell
         write_close('close') # write close to trade_hist.csv
-        email('Close long')
+        send_email('Close long')
     # Close short
     elif(current_price > trade_price*(1+stop_loss) and trade_sig == 'sell'
          or current_price < trade_price*(1-take_profit) and trade_sig == 'sell'):
         print('stop loss or take profit')
         vol = vol_close
-        # order = kraken.create_market_buy_order ('BTC/USD', vol, {'leverage': 2}) # close sell with equal volume buy
+        order = kraken.create_market_buy_order ('BTC/USD', vol, {'leverage': 2}) # close sell with equal volume buy
         write_close('close') # write close to trade_hist.csv
-        email('Close short')
+        send_email('Close short')
     # Do nothing
     else:
         print('hold')
