@@ -4,36 +4,35 @@
 suppressWarnings(library(quantmod))
 suppressWarnings(library(TTR))
 
-# wait 55 seconds before run
-Sys.sleep(55)
+# wait 50 seconds to run so it'll run at minutes 29.5 min and 59.5
+Sys.sleep(50)
 
-
-# try and download data until 'df exists
-while(!exists('df', mode = 'numeric')){
+# create dummy ohlc.out to compare lengths
+ohlc.out = 1
+while(length(ohlc.out) == 1){ # run until the data downloads
+  # query data
   # download data from Kraken
   pair = "XXBTZUSD" # 0r "XXRPZUSD"
   interval = '30'
   base.url = "https://api.kraken.com/0/public/OHLC"
   url <- paste0(base.url, "?", "pair=", pair, "&interval=", interval)
-    
-    
+  
+  
   # interval = minute
   ohlc.out <- jsonlite::fromJSON(url) 
-    #time.stamp = ohlc.out[[2]]$last
-    
-  # create data table + change to numerical
-  df = ohlc.out[[2]]$XXBTZUSD
-  df = as.numeric(df) # change to numeric
-  df = matrix(data = df, ncol = 8, byrow = FALSE) # recreate data matrix
 }
+
+# create data table
+df = ohlc.out[[2]]$XXBTZUSD
+df = as.numeric(df) # change to numeric
+df = matrix(data = df, ncol = 8, byrow = FALSE) # recreate data matrix
 colnames(df) = c("time","open","high","low","close","vwap","colume","count")
 df = df[,1:5]
 
 
-# set directory
-dir = '/home/pi/Desktop/files'
-setwd(dir)
-
+# set up directory on rasbperry
+# dir = '/home/pi/Desktop/files'
+# setwd(dir)
 # read in aggregate data
 df_hist = read.csv('xbt_data.csv')
 df_hist = df_hist[,-1]
@@ -41,11 +40,12 @@ df_hist = df_hist[,-1]
 # number of new intervals (720 = 0, 719 = 1, 718 = 2... etc)
 id = which(df[,1] == df_hist[nrow(df_hist),1])
 
-if(id > 0){
+if(id < 720){
   dat = rbind(df_hist, df[(id+1):nrow(df),])
   write.csv(dat, file = 'xbt_data.csv')
   print(dat[nrow(dat),1] - dat[nrow(dat)-1,1])
-  new_interval = nrow(dat) - nrow(df_hist) # is greater than 1 look back an extra interval in final write of trade_hist.csv
+} else {
+  dat = df_hist
 }
 
 
@@ -156,7 +156,7 @@ trade_hist = as.matrix(trade_hist[,-1])
 
 signal = max(buy,sell)
 trade = matrix(data = 0, ncol = 3, nrow = 1) # create matrix to fill with trade information
-if(signal != nrow(dat) | signal != nrow(dat)-1){ # if signal is not in previous two intervals
+if(signal != nrow(dat)){
   trade = NA
 } else if (signal %in% buy){
   trade[1,1] = as.character(dat[signal,1]) # date
