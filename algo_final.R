@@ -52,8 +52,8 @@ if(id < 720){
 
 # save dat for algo
 # if dat has more than 720 rows -- only use last 720 rows for algorithm
-if(nrow(dat) > 1000){
-  dat.origin = dat[(nrow(dat)-999):nrow(dat),]
+if(nrow(dat) > 1500){
+  dat.origin = dat[(nrow(dat)-1499):nrow(dat),]
 } else {
   dat.origin = dat
 }
@@ -62,8 +62,6 @@ if(nrow(dat) > 1000){
 
 # parameters: (1)n_bb, (2)n_sd, (3)n_adx, (4)sma_s, (5)sma_l, (6)adx_lim = 20, (7)take_proft
 v = c(24.835600,  1.975548, 18.474961, 17.654480, 60.240259, 20.560255,  1.477374)
-take_proit = .05
-stoo_loss = .05
 
 n_bb = as.integer(v[1]) #20
 sd_bb = v[2] #2
