@@ -31,8 +31,9 @@ df = df[,1:5]
 
 
 # set up directory on rasbperry
-# dir = '/home/pi/Desktop/files'
-# setwd(dir)
+dir = '/home/pi/Desktop/files'
+setwd(dir)
+
 # read in aggregate data
 df_hist = read.csv('xbt_data.csv')
 df_hist = df_hist[,-1]
