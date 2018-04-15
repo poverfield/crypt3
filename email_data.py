@@ -28,7 +28,7 @@ msg = MIMEMultipart()
 msg['Subject'] = 'Data'
 msg['From'] = sender
 msg['To'] = receiver
-file = 'xbt_data.csv'
+file = 'eth_data.csv'
 
 msg.attach(MIMEText("Aggregated data."))
 attachment = MIMEBase('application', 'octet-stream')
