@@ -103,6 +103,8 @@ if(signal != nrow(dat)){
   trade[1,2] = 'buy'  # signal
   trade[1,3] = dat[signal,5] # price
   trade_hist = rbind(trade_hist, trade)
+  # write out new file
+  write.csv(trade_hist, file = 'trade_hist.csv')
   # write out plot
   png(filename="plot.png")
   plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
@@ -116,6 +118,8 @@ if(signal != nrow(dat)){
   trade[1,2] = 'sell'  # signal
   trade[1,3] = dat[signal,5] # price
   trade_hist = rbind(trade_hist, trade)
+  # write out new file
+  write.csv(trade_hist, file = 'trade_hist.csv')
   # write out plot
   png(filename="plot.png")
   plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
@@ -125,9 +129,6 @@ if(signal != nrow(dat)){
   abline(v = sell, col = 2, lty = 2)
   dev.off()
 }
-
-# write out new file
-write.csv(trade_hist, file = 'trade_hist.csv')
 
 # write out current date/time and price
 sink('current_price.txt')
