@@ -10,8 +10,8 @@ import datetime
 import os
 
 # parameters: as %
-take_profit = .05
-stop_loss = .05
+take_profit = .03
+stop_loss = .03
 
 # set working directory in raspberry
 path = '/home/pi/Desktop/files'
