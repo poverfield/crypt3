@@ -1,4 +1,4 @@
-# csv reader
+# trade script for eth coin
 import csv
 import ccxt
 import smtplib
@@ -10,12 +10,12 @@ import datetime
 import os
 
 # parameters: as %
-take_profit = .04
-stop_loss = .03
+take_profit = .05
+stop_loss = .05
 
 # set working directory in raspberry
-path = '/home/pi/Desktop/files'
-os.chdir(path)
+# path = '/home/pi/Desktop/files'
+# os.chdir(path)
 
 # read in private information
 f = open('account.txt') # read in account.txt
@@ -35,12 +35,18 @@ def send_email(trade): # function with input 'buy/sell/close'
     msg['Subject'] = 'Trade'
     msg['From'] = sender
     msg['To'] = receiver
+    file = 'plot.png'
 
     now = str(datetime.datetime.now())
     now_date = now[0:16]
     
     message = 'Time stamp: ' + now_date + '\n\n' + 'Action: ' + trade + '\n\n' + 'price: ' + str(current_price)
     msg.attach(MIMEText(message))
+    attachment = MIMEBase('application', 'octet-stream')
+    attachment.set_payload(open(file, 'rb').read())
+    encoders.encode_base64(attachment)
+    attachment.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(file))
+    msg.attach(attachment)
     s = server = smtplib.SMTP('smtp.gmail.com:587') #smtp.gmail.com:587
     s.starttls()
     s.login(sender, password)
@@ -108,20 +114,20 @@ if(trade_sig != prev_sig):
     if(trade_date == current_date and trade_sig == 'buy'):
         print('buy')
         # use vol
-        order = kraken.create_market_buy_order ('BTC/USD', vol, {'leverage': 2}) # kraken long position at leverage 2:1
+        order = kraken.create_market_buy_order ('ETH/USD', vol, {'leverage': 2}) # kraken long position at leverage 2:1
         send_email('Buy')
     # Sell 
     elif(trade_date == current_date and trade_sig == 'sell'):
         print('sell')
         # use vol
-        order = kraken.create_market_sell_order ('BTC/USD', vol, {'leverage': 2}) # kraken short position at leverage 2:1
+        order = kraken.create_market_sell_order ('ETH/USD', vol, {'leverage': 2}) # kraken short position at leverage 2:1
         send_email('Sell')
     # Close long 
     elif(current_price > trade_price*(1+take_profit) and trade_sig == 'buy'
          or current_price < trade_price*(1-stop_loss) and trade_sig == 'buy'):
         print('take profit or stop loss')
         vol = vol_close
-        order = kraken.create_market_sell_order ('BTC/USD', vol, {'leverage': 2}) # close long with equal volume sell
+        order = kraken.create_market_sell_order ('ETH/USD', vol, {'leverage': 2}) # close long with equal volume sell
         write_close('close') # write close to trade_hist.csv
         send_email('Close long')
     # Close short
@@ -129,7 +135,7 @@ if(trade_sig != prev_sig):
          or current_price < trade_price*(1-take_profit) and trade_sig == 'sell'):
         print('stop loss or take profit')
         vol = vol_close
-        order = kraken.create_market_buy_order ('BTC/USD', vol, {'leverage': 2}) # close sell with equal volume buy
+        order = kraken.create_market_buy_order ('ETH/USD', vol, {'leverage': 2}) # close sell with equal volume buy
         write_close('close') # write close to trade_hist.csv
         send_email('Close short')
     # Do nothing

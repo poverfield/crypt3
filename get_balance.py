@@ -12,8 +12,8 @@ from email import encoders
 import os
 
 # set working directory in raspberry
-path = '/home/pi/Desktop/files'
-os.chdir(path)
+#path = '/home/pi/Desktop/files'
+#os.chdir(path)
 
 # read in private information
 f = open('account.txt') # read in account.txt
@@ -55,7 +55,7 @@ def send_email(usd,  delt):
     disclaimer = '''The above percent change assumes that no funds have been deposited/withdrawn from your account during this 15-day period. \n
 If there have been then this value is not correct.\n
 Additionally, no open positions are included in the 'Percent Change' value.'''
-    message = message = 'Date: ' + now_date + '\n\n' + 'Account Balance: $' + str(usd) + '\n\n' + 'Percent Change: ' + str(delt) + '%' + '\n\n\n' + 'Disclaimer: ' + disclaimer
+    message = message = 'Date: ' + now_date + '\n\n' + 'Account Balance: $' + str(usd) + '\n\n' + 'Percent Change: ' + str(delt) + ' %' + '\n\n\n' + 'Disclaimer: ' + disclaimer
     msg.attach(MIMEText(message))
     s = server = smtplib.SMTP('smtp.gmail.com:587') #smtp.gmail.com:587
     s.starttls()
@@ -71,7 +71,7 @@ balance_old = round(float(f_lines[0]),2)
 f.close()
 
 # percent change
-delt = usd/balance_old -1
+delt = round((usd/balance_old -1)*100,2)
 
 # email
 send_email(usd, delt)

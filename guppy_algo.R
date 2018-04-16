@@ -68,6 +68,7 @@ rg_percent = quantile(rg, .55)
 gup_window = which(rg < abs(rg_percent) & rg > -abs(rg_percent))
 
 # trade at end of tight window
+# trade at end of tight window
 gup_end_func = function(trade){
   end_window = gup_window[which(diff(gup_window) != 1)] + 1
   buy = end_window[dat[end_window,5] > gup[end_window,7] & dat[end_window,5] > gup[end_window,12]]
@@ -78,10 +79,10 @@ gup_end_func = function(trade){
      dat[gup_window[length(gup_window)] + 1,5] > gup[gup_window[length(gup_window)] + 1,12]){
     buy = c(buy, gup_window[length(gup_window)] + 1)
   } else if(gup_window[length(gup_window)] != nrow(dat) &
-     dat[gup_window[length(gup_window)] + 1,5] < gup[gup_window[length(gup_window)] + 1,7] &
-     dat[gup_window[length(gup_window)] + 1,5] < gup[gup_window[length(gup_window)] + 1,12]){
+            dat[gup_window[length(gup_window)] + 1,5] < gup[gup_window[length(gup_window)] + 1,7] &
+            dat[gup_window[length(gup_window)] + 1,5] < gup[gup_window[length(gup_window)] + 1,12]){
     sell = c(sell, gup_window[length(gup_window)] + 1)
-     }
+  }
   if(trade == 'buy'){
     return(buy)
   } else if(trade == 'sell'){
@@ -102,16 +103,31 @@ if(signal != nrow(dat)){
   trade[1,2] = 'buy'  # signal
   trade[1,3] = dat[signal,5] # price
   trade_hist = rbind(trade_hist, trade)
-  # write out new file
-  write.csv(trade_hist, file = 'trade_hist.csv')
+  # write out plot
+  png(filename="plot.png")
+  plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
+  lines(x = 1:nrow(dat), y = gup[,7], col = 2, lty = 2)
+  lines(x = 1:nrow(dat), y = gup[,12], col = 2, lty = 2)
+  abline(v= buy, col = 3, lty = 2)
+  abline(v = sell, col = 2, lty = 2)
+  dev.off()
 } else if (signal %in% sell){
   trade[1,1] = as.character(dat[signal,1]) # date
   trade[1,2] = 'sell'  # signal
   trade[1,3] = dat[signal,5] # price
   trade_hist = rbind(trade_hist, trade)
-  # write out new file
-  write.csv(trade_hist, file = 'trade_hist.csv')
+  # write out plot
+  png(filename="plot.png")
+  plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
+  lines(x = 1:nrow(dat), y = gup[,7], col = 2, lty = 2)
+  lines(x = 1:nrow(dat), y = gup[,12], col = 2, lty = 2)
+  abline(v= buy, col = 3, lty = 2)
+  abline(v = sell, col = 2, lty = 2)
+  dev.off()
 }
+
+# write out new file
+write.csv(trade_hist, file = 'trade_hist.csv')
 
 # write out current date/time and price
 sink('current_price.txt')
