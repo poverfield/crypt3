@@ -102,15 +102,16 @@ if(signal != nrow(dat)){
   trade[1,2] = 'buy'  # signal
   trade[1,3] = dat[signal,5] # price
   trade_hist = rbind(trade_hist, trade)
+  # write out new file
+  write.csv(trade_hist, file = 'trade_hist.csv')
 } else if (signal %in% sell){
   trade[1,1] = as.character(dat[signal,1]) # date
   trade[1,2] = 'sell'  # signal
   trade[1,3] = dat[signal,5] # price
   trade_hist = rbind(trade_hist, trade)
+  # write out new file
+  write.csv(trade_hist, file = 'trade_hist.csv')
 }
-
-# write out new file
-write.csv(trade_hist, file = 'trade_hist.csv')
 
 # write out current date/time and price
 sink('current_price.txt')
