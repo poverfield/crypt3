@@ -14,8 +14,8 @@ take_profit = .05
 stop_loss = .05
 
 # set working directory in raspberry
-# path = '/home/pi/Desktop/files'
-# os.chdir(path)
+path = '/home/pi/Desktop/files'
+os.chdir(path)
 
 # read in private information
 f = open('account.txt') # read in account.txt
