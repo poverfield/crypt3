@@ -72,6 +72,16 @@ gup_end_func = function(trade){
   end_window = gup_window[which(diff(gup_window) != 1)] + 1
   buy = end_window[dat[end_window,5] > gup[end_window,7] & dat[end_window,5] > gup[end_window,12]]
   sell = end_window[dat[end_window,5] < gup[end_window,7] & dat[end_window,5] < gup[end_window,12]]
+  # catch last signal
+  if(gup_window[length(gup_window)] != nrow(dat) &
+     dat[gup_window[length(gup_window)] + 1,5] > gup[gup_window[length(gup_window)] + 1,7] &
+     dat[gup_window[length(gup_window)] + 1,5] > gup[gup_window[length(gup_window)] + 1,12]){
+    buy = c(buy, gup_window[length(gup_window)] + 1)
+  } else if(gup_window[length(gup_window)] != nrow(dat) &
+     dat[gup_window[length(gup_window)] + 1,5] < gup[gup_window[length(gup_window)] + 1,7] &
+     dat[gup_window[length(gup_window)] + 1,5] < gup[gup_window[length(gup_window)] + 1,12]){
+    sell = c(sell, gup_window[length(gup_window)] + 1)
+     }
   if(trade == 'buy'){
     return(buy)
   } else if(trade == 'sell'){
