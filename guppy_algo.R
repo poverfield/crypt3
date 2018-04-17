@@ -93,6 +93,10 @@ gup_end_func = function(trade){
 buy = gup_end_func('buy')
 sell = gup_end_func('sell')
 
+ # OUTPUT
+trade_hist = read.csv('trade_hist.csv') # read in previous trades
+trade_hist = as.matrix(trade_hist[,-1])
+  
 # write out signal
 signal = max(buy,sell)
 trade = matrix(data = 0, ncol = 3, nrow = 1) # create matrix to fill with trade information
