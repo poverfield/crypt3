@@ -102,11 +102,7 @@ def order_func(action, pair, volume, volume2, stop_price, take_price):
     f.write('; Action: ' + str(order3['result']['descr']['order']))
     f.write('; ID: ' + str(order3['result']['txid'])[2:][:-2])  
     f.close()
-    # write trade id to trade_id.txt
-    #f = open('trade_id.txt','w')
-    #f.write(str(order['result']['txid'])[2:][:-2])
-    #f.close()
-
+    
 # Close open trades
 def close_open_func():
     open_order = k.query_private('OpenOrders') # get open orders
@@ -127,6 +123,14 @@ trade_date = f_data[len(f_data)-1][1]
 f.close()
 
 # Read in current price
+f = open('current_price.txt')
+f_lines = f.readlines()
+current_date = f_lines[0] # read in date + time intervals
+current_date = current_date[0:(len(current_date)-1)] # remove '\n' from current_date
+current_price = float(f_lines[1]) # price
+f.close()
+
+# read in current price
 f = open('current_price.txt')
 f_lines = f.readlines()
 current_date = f_lines[0] # read in date + time intervals
