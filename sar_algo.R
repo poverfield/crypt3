@@ -5,7 +5,7 @@ suppressWarnings(library(quantmod))
 suppressWarnings(library(TTR))
 
 # wait 50 seconds to run so it'll run at minutes 29:50 min and 59:50
-Sys.sleep(50)
+Sys.sleep(40)
 
 # Sar Paramaters
 v = 0.031
