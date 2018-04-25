@@ -147,11 +147,6 @@ balance = balance['result'] # clean 'balance'
 usd = float(balance['ZUSD'])
 volume_open = round(((usd*.5)/current_price),4)
 
-# recent trade information
-close_order = k.query_private('ClosedOrders',{'trades': 'true','start':'1523363400'})
-recent_id = get_recent_id()
-prev_action = close_order['result']['closed'][recent_id]['descr']['type']
-
 # Get prev_volume from open position
 open_order = k.query_private('OpenOrders')
 if(len(open_order['result']['open']) > 0):
@@ -162,7 +157,7 @@ if(len(open_order['result']['open']) > 0):
 
 # Execute Trade
 if(len(open_order['result']['open']) > 1):
-    if(trade_date == current_trade and trade_sig == 'buy'):
+    if(trade_date == current_date and trade_sig == 'buy'):
         close_open_func() # cancel open orders
         action = 'buy'
         pair = 'XETHZUSD'
@@ -172,7 +167,7 @@ if(len(open_order['result']['open']) > 1):
         take_price = str(current_price*(1+take_profit))
         order_func(action, pair, volume, volume2, stop_price, take_price)
         print('buy reverse')
-    elif(trade_date == current_trade and trade_sig == 'sell'):
+    elif(trade_date == current_date and trade_sig == 'sell'):
         close_open_func() # cancel open orders
         action = 'sell'
         pair = 'XETHZUSD'
@@ -183,7 +178,7 @@ if(len(open_order['result']['open']) > 1):
         order_func(action, pair, volume,  volume2, stop_price, take_price)
         print('sell reverse')
 elif(len(open_order['result']['open']) < 2):
-    if(trade_date == current_trade and trade_sig == 'buy'):
+    if(trade_date == current_date and trade_sig == 'buy'):
         close_open_func() # cancel open orders
         action = 'buy'
         pair = 'XETHZUSD'
@@ -193,7 +188,7 @@ elif(len(open_order['result']['open']) < 2):
         take_price = str(current_price*(1+take_profit))
         order_func(action, pair, volume,  volume2, stop_price, take_price)
         print('buy new')
-    elif(trade_date == current_trade and trade_sig == 'sell'):
+    elif(trade_date == current_date and trade_sig == 'sell'):
         close_open_func() # cancel open orders
         action = 'sell'
         pair = 'XETHZUSD'
