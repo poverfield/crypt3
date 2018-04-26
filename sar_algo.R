@@ -109,8 +109,7 @@ if(signal != nrow(dat)){
   # write out plot
   png(filename="plot.png")
   plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
-  lines(x = 1:nrow(dat), y = gup[,7], col = 2, lty = 2)
-  lines(x = 1:nrow(dat), y = gup[,12], col = 2, lty = 2)
+  lines(1:length(sar), y = sar, col = "grey")
   abline(v= buy, col = 3, lty = 2)
   abline(v = sell, col = 2, lty = 2)
   dev.off()
@@ -124,8 +123,7 @@ if(signal != nrow(dat)){
   # write out plot
   png(filename="plot.png")
   plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
-  lines(x = 1:nrow(dat), y = gup[,7], col = 2, lty = 2)
-  lines(x = 1:nrow(dat), y = gup[,12], col = 2, lty = 2)
+  lines(1:length(sar), y = sar, col = "grey")
   abline(v= buy, col = 3, lty = 2)
   abline(v = sell, col = 2, lty = 2)
   dev.off()
