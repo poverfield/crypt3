@@ -5,7 +5,7 @@ suppressWarnings(library(quantmod))
 suppressWarnings(library(TTR))
 
 # wait 50 seconds to run so it'll run at minutes 29:50 min and 59:50
-Sys.sleep(40)
+Sys.sleep(50)
 
 # Sar Paramaters
 v = 0.031
@@ -67,28 +67,19 @@ if(nrow(dat) > 1000){
 sar = SAR(dat.origin[,3:4], accel = c(v,v))
 
 dat = dat.origin
-# signal = buy when price > sar
-buy = which(dat[,5] > sar)
-sell = which(dat[,5] < sar)
 
-if(sell[1] < buy[1]){
-  sell = sell[(which(sell > buy[1])[1]):length(sell)]
-}
 
-hold_length = max(c(length(buy), length(sell)))
-  
-b = buy[1]
-s = sell[1]
-  
-# clean indices
-for(i in 2:hold_length){
-  b = c(b, buy[which(buy > s[i-1])[1]])
-  s = c(s, sell[which(sell > b[i])[1]])
+buy = sell = 0
+for(i in 2:nrow(dat)){
+  if(dat[i-1,5] < sar[i-1] & dat[i,5] >= sar[i]){
+    buy = c(buy,i)
+  } else if(dat[i-1,5] > sar[i-1] & dat[i,5] <= sar[i]){
+    sell = c(sell,i)
+  }
 }
-  
-# remove NAs
-buy = b[!is.na(b)]
-sell = s[!is.na(s)]
+# remove first zero
+buy = buy[-1]
+sell = sell[-1]
 
 # read in trade history
 trade_hist = read.csv('trade_hist.csv')
@@ -108,7 +99,7 @@ if(signal != nrow(dat)){
   write.csv(trade_hist, file = 'trade_hist.csv')
   # write out plot
   png(filename="plot.png")
-  plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price ($)', main = 'ETH Price and Historic Trades')
+  plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
   lines(1:length(sar), y = sar, col = "grey")
   abline(v= buy, col = 3, lty = 2)
   abline(v = sell, col = 2, lty = 2)
@@ -122,7 +113,7 @@ if(signal != nrow(dat)){
   write.csv(trade_hist, file = 'trade_hist.csv')
   # write out plot
   png(filename="plot.png")
-  plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price ($)', main = 'ETH Price and Historic Trades')
+  plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
   lines(1:length(sar), y = sar, col = "grey")
   abline(v= buy, col = 3, lty = 2)
   abline(v = sell, col = 2, lty = 2)
