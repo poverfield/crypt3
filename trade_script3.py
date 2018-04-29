@@ -120,6 +120,7 @@ f_data = list(f_reader)
 trade_sig = f_data[len(f_data)-1][2] # most recent trade
 trade_price = float(f_data[len(f_data)-1][3]) # most recent price
 trade_date = f_data[len(f_data)-1][1]
+prev_sig = f_data[len(f_data)-2][2] # previous trade
 f.close()
 
 # Read in current price
@@ -156,50 +157,51 @@ if(len(open_order['result']['open']) > 0):
 
 
 # Execute Trade
-if(len(open_order['result']['open']) > 1):
-    if(trade_date == current_date and trade_sig == 'buy'):
-        close_open_func() # cancel open orders
-        action = 'buy'
-        pair = 'XETHZUSD'
-        volume = str(float(prev_vol)*2) # use 2x volume to close previous trade and open new trade
-        volume2 = prev_vol
-        stop_price = str(round(current_price*(1-stop_loss),1))
-        take_price = str(round(current_price*(1+take_profit),1))
-        order_func(action, pair, volume, volume2, stop_price, take_price)
-        print('buy reverse')
-    elif(trade_date == current_date and trade_sig == 'sell'):
-        close_open_func() # cancel open orders
-        action = 'sell'
-        pair = 'XETHZUSD'
-        volume = str(float(prev_vol)*2) # use 2x volume to close previous trade and open new trade
-        volume2 = prev_vol
-        stop_price = str(round(current_price*(1+stop_loss),1))
-        take_price = str(round(current_price*(1-take_profit),1))
-        order_func(action, pair, volume,  volume2, stop_price, take_price)
-        print('sell reverse')
-elif(len(open_order['result']['open']) < 2):
-    if(trade_date == current_date and trade_sig == 'buy'):
-        close_open_func() # cancel open orders
-        action = 'buy'
-        pair = 'XETHZUSD'
-        volume = volume_open # use volume from account
-        volume2 = volume
-        stop_price = str(round(current_price*(1-stop_loss),1))
-        take_price = str(round(current_price*(1+take_profit),1))
-        order_func(action, pair, volume,  volume2, stop_price, take_price)
-        print('buy new')
-    elif(trade_date == current_date and trade_sig == 'sell'):
-        close_open_func() # cancel open orders
-        action = 'sell'
-        pair = 'XETHZUSD'
-        volume = volume_open # use volume from account
-        volume2 = volume # close volumes
-        stop_price = str(round(current_price*(1+stop_loss),1))
-        take_price = str(round(current_price*(1-take_profit),1))
-        order_func(action, pair, volume,  volume2, stop_price, take_price)
-        print('sell new')
-else:
-    print('Hold.')
+if(trade_sig != prev_sig):
+    if(len(open_order['result']['open']) > 1):
+        if(trade_date == current_date and trade_sig == 'buy'):
+            close_open_func() # cancel open orders
+            action = 'buy'
+            pair = 'XETHZUSD'
+            volume = str(float(prev_vol)*2) # use 2x volume to close previous trade and open new trade
+            volume2 = prev_vol
+            stop_price = str(round(current_price*(1-stop_loss),1))
+            take_price = str(round(current_price*(1+take_profit),1))
+            order_func(action, pair, volume, volume2, stop_price, take_price)
+            print('buy reverse')
+        elif(trade_date == current_date and trade_sig == 'sell'):
+            close_open_func() # cancel open orders
+            action = 'sell'
+            pair = 'XETHZUSD'
+            volume = str(float(prev_vol)*2) # use 2x volume to close previous trade and open new trade
+            volume2 = prev_vol
+            stop_price = str(round(current_price*(1+stop_loss),1))
+            take_price = str(round(current_price*(1-take_profit),1))
+            order_func(action, pair, volume,  volume2, stop_price, take_price)
+            print('sell reverse')
+    elif(len(open_order['result']['open']) < 2):
+        if(trade_date == current_date and trade_sig == 'buy'):
+            close_open_func() # cancel open orders
+            action = 'buy'
+            pair = 'XETHZUSD'
+            volume = volume_open # use volume from account
+            volume2 = volume
+            stop_price = str(round(current_price*(1-stop_loss),1))
+            take_price = str(round(current_price*(1+take_profit),1))
+            order_func(action, pair, volume,  volume2, stop_price, take_price)
+            print('buy new')
+        elif(trade_date == current_date and trade_sig == 'sell'):
+            close_open_func() # cancel open orders
+            action = 'sell'
+            pair = 'XETHZUSD'
+            volume = volume_open # use volume from account
+            volume2 = volume # close volumes
+            stop_price = str(round(current_price*(1+stop_loss),1))
+            take_price = str(round(current_price*(1-take_profit),1))
+            order_func(action, pair, volume,  volume2, stop_price, take_price)
+            print('sell new')
+    else:
+        print('Hold.')
 
 print('Script complete.')
 print('\nCurrent date: ')
