@@ -164,7 +164,7 @@ if(len(open_order['result']['open']) > 1):
         volume = str(float(prev_vol)*2) # use 2x volume to close previous trade and open new trade
         volume2 = prev_vol
         stop_price = str(round(current_price*(1-stop_loss),1))
-        take_price = str(round(current_price*(1+take_profit),1),1))
+        take_price = str(round(current_price*(1+take_profit),1))
         order_func(action, pair, volume, volume2, stop_price, take_price)
         print('buy reverse')
     elif(trade_date == current_date and trade_sig == 'sell'):
@@ -202,7 +202,10 @@ else:
     print('Hold.')
 
 print('Script complete.')
-print('Current date: ', + str(current_date))
-print('trade date: ' + str(trade_date))
-print('current price: ' + str(current_price))
+print('\nCurrent date: ')
+print(current_date)
+print('\ntrade date: ')
+print(trade_date)
+print('\ncurrent price: ')
+print(current_price)
 
