@@ -131,14 +131,6 @@ current_date = current_date[0:(len(current_date)-1)] # remove '\n' from current_
 current_price = float(f_lines[1]) # price
 f.close()
 
-# read in current price
-f = open('current_price.txt')
-f_lines = f.readlines()
-current_date = f_lines[0] # read in date + time intervals
-current_date = current_date[0:(len(current_date)-1)] # remove '\n' from current_date
-current_price = float(f_lines[1]) # price
-f.close()
-
 # Connect to Kraken
 k = krakenex.API(key = api_key, secret = api_secret)
 
