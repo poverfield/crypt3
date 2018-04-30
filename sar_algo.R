@@ -120,11 +120,12 @@ if(signal != nrow(dat)){
   dev.off()
 }
 
-
-
 # write out current date/time and price
 sink('current_price.txt')
 cat(as.character(dat[nrow(dat),1]))
 cat('\n')
 cat(dat[nrow(dat),5])
 sink()
+
+write.csv(dat[buy,1], file = 'buy.csv')
+write.csv(dat[sell,1], file = 'sell.csv')
