@@ -20,4 +20,4 @@ df = df[,1:5]
 # dir = 
 # setwd = dir
 # write out file
-write.csv(df, file = 'eth_data.csv')
+write.csv(df, file = 'eth_data_test.csv')
