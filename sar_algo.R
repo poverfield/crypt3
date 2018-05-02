@@ -10,7 +10,7 @@ dir = '/home/pi/Desktop/files'
 setwd(dir)
 
 # Sar Paramaters
-v = 0.031
+v = 0.0085
 
 # Get previous and current time intervals
 prev_date = read.delim('current_price.txt', header = FALSE)[1,1]
