@@ -1,21 +1,29 @@
 # SAR Algorithm
+# Run on 0 and 30 minutes
 
 # load packages
 suppressWarnings(library(quantmod))
 suppressWarnings(library(TTR))
 
-# wait 50 seconds to run so it'll run at minutes 29:50 min and 59:50
-Sys.sleep(50)
+# set up directory on rasbperry
+# dir = '/home/pi/Desktop/files'
+# setwd(dir)
 
 # Sar Paramaters
 v = 0.031
 
+# Get previous and current time intervals
+prev_date = read.delim('current_price.txt', header = FALSE)[1,1]
+new_date = prev_date + 1800
+
+# wait 5 seconds to run to get new interval
+Sys.sleep(5)
+
 # create dummy ohlc.out to compare lengths
 ohlc.out = 1
 while(length(ohlc.out) == 1){ # run until the data downloads
-  # query data
-  # download data from Kraken
-  pair = "XETHZUSD" # 0r "XXRPZUSD"
+  Sys.sleep(1) # wait 1 second before re try download
+  pair = "XETHZUSD" 
   interval = '30'
   base.url = "https://api.kraken.com/0/public/OHLC"
   url <- paste0(base.url, "?", "pair=", pair, "&interval=", interval)
@@ -32,35 +40,21 @@ df = matrix(data = df, ncol = 8, byrow = FALSE) # recreate data matrix
 colnames(df) = c("time","open","high","low","close","vwap","colume","count")
 df = df[,1:5]
 
-
-# set up directory on rasbperry
-dir = '/home/pi/Desktop/files'
-setwd(dir)
-
-# read in aggregate data
-df_hist = read.csv('eth_data.csv')
-df_hist = df_hist[,-1]
-
-# number of new intervals (720 = 0, 719 = 1, 718 = 2... etc)
-id = which(df[,1] == df_hist[nrow(df_hist),1])
-
-if(id < 720){
-  dat = rbind(df_hist, df[(id+1):nrow(df),])
-  write.csv(dat, file = 'eth_data.csv')
-  print(dat[nrow(dat),1] - dat[nrow(dat)-1,1])
+if(new_date %in% df[,1]){
+  id = which(df[,1] == new_date) # get new date row
+  dat.origin = df[1:id,] # shorten df to include only 1 new interval
+  # write out current date/time and price
+  sink('current_price.txt')
+  cat(as.character(dat.origin[nrow(dat.origin),1]))
+  cat('\n')
+  cat(dat.origin[nrow(dat.origin),5])
+  cat('\n')
+  sink()  
+  print('New data.')
 } else {
-  dat = df_hist
+  dat.origin = df
+  print('no new data')
 }
-
-
-# save dat for algo
-# if dat has more than 720 rows -- only use last 720 rows for algorithm
-if(nrow(dat) > 1000){
-  dat.origin = dat[(nrow(dat)-999):nrow(dat),]
-} else {
-  dat.origin = dat
-}
-
 
 ########## SAR ALGO  ########## 
 
@@ -80,6 +74,8 @@ for(i in 2:nrow(dat)){
 # remove first zero
 buy = buy[-1]
 sell = sell[-1]
+
+######### OUTPUT ###############
 
 # read in trade history
 trade_hist = read.csv('trade_hist.csv')
@@ -113,19 +109,13 @@ if(signal != nrow(dat)){
   write.csv(trade_hist, file = 'trade_hist.csv')
   # write out plot
   png(filename="plot.png")
-  plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price ($)', main = 'ETH Price and Historic Trades')
+  plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
   lines(1:length(sar), y = sar, col = "grey")
   abline(v= buy, col = 3, lty = 2)
   abline(v = sell, col = 2, lty = 2)
   dev.off()
 }
 
-# write out current date/time and price
-sink('current_price.txt')
-cat(as.character(dat[nrow(dat),1]))
-cat('\n')
-cat(dat[nrow(dat),5])
-sink()
-
 write.csv(dat[buy,1], file = 'buy.csv')
 write.csv(dat[sell,1], file = 'sell.csv')
+
