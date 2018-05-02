@@ -6,8 +6,8 @@ suppressWarnings(library(quantmod))
 suppressWarnings(library(TTR))
 
 # set up directory on rasbperry
-# dir = '/home/pi/Desktop/files'
-# setwd(dir)
+dir = '/home/pi/Desktop/files'
+setwd(dir)
 
 # Sar Paramaters
 v = 0.031
