@@ -1,3 +1,0 @@
-2018-04-24 21:39; Error: []; Action: buy 0.04400000 ETHUSD @ market with 2:1 leverage; ID: ONFART-GRZ6B-PSCBOS
-Take_profit--> Error: []; Action: sell 0.02200000 ETHUSD @ take profit 730.00; ID: OL26EZ-VLLEH-4OAGJF
-stop_loss--> Error: []; Action: sell 0.02200000 ETHUSD @ stop loss 650.00; ID: O4KQPC-NMARG-U2TDVA
