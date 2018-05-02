@@ -1,0 +1,15 @@
+Files:
+
+1) initial_stamp.R 
+	- run once to initialize current_price.txt
+2) sar_algo.R
+	- run on every 0 and 30 minute
+3) timestamp_check.R
+	- run every 24 hours (at 6 pm)
+4) trade_script3.py
+	- run every 0 and 30 minute
+	- update github with time.sleep(45)
+5) timestamp_check.py
+	- run every 24 hours at same time as timestamp_check.R
+6) email_trade_history.py
+	- run every week (sunday night)
