@@ -11,6 +11,9 @@ import os
 import krakenex
 import time
 
+# wait 45 seconds so R script can finish
+time.sleep(45)
+
 # Set working directory in raspberry
 path = '/home/pi/Desktop/files'
 os.chdir(path)
