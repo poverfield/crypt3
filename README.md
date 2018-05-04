@@ -5,3 +5,7 @@
 # required packages are included for python and R
 
 # must be run on python3
+
+# Email requests
+# To kill script email with subject 'Request' and text 'kill'
+# to request plot email with subject 'Request' and text 'plot'
