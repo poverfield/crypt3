@@ -26,7 +26,7 @@ def kill_script():
     from crontab import CronTab
     my_cron = CronTab(user = 'pi') # open cron editor
     for job in my_cron:
-        if 'trade_script3' in job:
+        if 'trade script' in job.comment:
             job.month.every(12) # run trade script only in december
             my_cron.write()    
 
