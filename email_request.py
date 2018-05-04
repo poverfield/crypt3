@@ -49,8 +49,8 @@ def email_plot():
     print('Sending...')
     s = server = smtplib.SMTP('smtp.gmail.com:587') #smtp.gmail.com:587
     s.starttls()
-    s.login(sender, password)
-    s.sendmail(sender, receiver, msg.as_string())
+    s.login(email_addr, password)
+    s.sendmail(email_addr, email_addr, msg.as_string())
     s.quit()
     print('done')
 
