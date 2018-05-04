@@ -27,7 +27,8 @@ def kill_script():
     my_cron = CronTab(user = 'pi') # open cron editor
     for job in my_cron:
         if 'trade_script3' in job:
-            job.month.every(12) # run trade script only in december
+            job.month(12) # run trade script only in december
+            job.hour(0) # run script every 24 hours
             my_cron.write()    
 
 # email function
