@@ -1,5 +1,5 @@
-# kraken accunt balance
-# Run on the 1,16 of each month
+# get balance trade bot 3
+# Run on the 1,16 of each month, or when deposit money into kraken
 
 import ccxt
 import csv
@@ -31,10 +31,6 @@ kraken.secret = api_secret
 
 balance = kraken.fetchBalance()
 usd = round(balance['USD']['total'],2)
-eth = balance['ETH']['total']
-
-# get open orders
-open_order = len(kraken.fetchOpenOrders())
 
 # date
 now = str(datetime.datetime.now())
@@ -55,7 +51,12 @@ def send_email(usd,  delt):
     disclaimer = '''The above percent change assumes that no funds have been deposited/withdrawn from your account during this 15-day period. \n
 If there have been then this value is not correct.\n
 Additionally, no open positions are included in the 'Percent Change' value.'''
-    message = message = 'Date: ' + now_date + '\n\n' + 'Account Balance: $' + str(usd) + '\n\n' + 'Percent Change: ' + str(delt) + ' %' + '\n\n\n' + 'Disclaimer: ' + disclaimer
+    # if new 15 day interval display percent change message
+    if '-01-' in now_date or '-16-' in now_date:
+        message = 'Date: ' + now_date + '\n\n' + 'Account Balance: $' + str(usd) + '\n\n' + 'Percent Change: ' + str(delt) + ' %' + '\n\n\n' + 'Disclaimer: ' + disclaimer
+    # if not new interval display new account balance
+    else:
+        message = 'Date' + now_date + '\n\n' + 'New Account Balance: $' + str(usd) + '\n\n' + 'Note: This account balance will be used to calculate the following percent change value.'
     msg.attach(MIMEText(message))
     s = server = smtplib.SMTP('smtp.gmail.com:587') #smtp.gmail.com:587
     s.starttls()
@@ -81,10 +82,3 @@ print('write balance to usd')
 f = open('balance.txt', 'w')
 f.write(str(usd))
 f.close()
-
-
-
-
-
-
-    
