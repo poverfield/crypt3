@@ -9,8 +9,8 @@ from email import encoders
 import os
 
 # set working directory in raspberry
-path = '/home/pi/Desktop/files'
-os.chdir(path)
+#path = '/home/pi/Desktop/files'
+#os.chdir(path)
 
 # read in private email information
 f = open('account.txt') # read in account.txt
@@ -26,7 +26,7 @@ def kill_script():
     from crontab import CronTab
     my_cron = CronTab(user = 'pi') # open cron editor
     for job in my_cron:
-        if 'trade script' in job.comment:
+        if 'trade script ' in job.comment:
             job.month.every(12) # run trade script only in december
             my_cron.write()    
 
@@ -48,8 +48,8 @@ def email_plot():
     print('Sending...')
     s = server = smtplib.SMTP('smtp.gmail.com:587') #smtp.gmail.com:587
     s.starttls()
-    s.login(email_addr, password)
-    s.sendmail(email_addr, email_addr, msg.as_string())
+    s.login(sender, password)
+    s.sendmail(sender, receiver, msg.as_string())
     s.quit()
     print('done')
 
@@ -63,12 +63,12 @@ if len(UIDS) > 0:
     raw_message = imap_obj.fetch([UIDS[0]], ['BODY[]', 'FLAGS'])
     message = pyzmail.PyzMessage.factory(raw_message[UIDS[0]]['BODY[]'])
     msg_subj = message.get_subject()
-    msg_text = message.text_part.get_payload().decode(message.text_part.charset)
+    msg_text = message.text_part.get_payload().decode(message.text_part.charset).upper()
     imap_obj.logout()
-    if 'kill' in msg_text:
+    if 'KILL' in msg_text:
         kill_script()
         print('kill script')
-    elif 'plot' in msg_text:
+    elif 'PLOT' in msg_text:
         email_plot()
         print('email plot')
 else:
