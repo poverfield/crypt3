@@ -153,7 +153,7 @@ if(len(open_order['result']['open']) > 0):
 
 # Execute Trade
 if(trade_sig != prev_sig):
-    if(len(open_order['result']['open']) > 1):
+    if(len(open_order['result']['open']) == 2):
         if(trade_date == current_date and trade_sig == 'buy'):
             close_open_func() # cancel open orders
             action = 'buy'
@@ -175,8 +175,8 @@ if(trade_sig != prev_sig):
             order_func(action, pair, volume,  volume2, stop_price, take_price)
             print('sell reverse')
     elif(len(open_order['result']['open']) < 2):
+        close_open_func() # cancel open orders to not trigger left over order
         if(trade_date == current_date and trade_sig == 'buy'):
-            close_open_func() # cancel open orders
             action = 'buy'
             pair = 'XETHZUSD'
             volume = volume_open # use volume from account
@@ -186,7 +186,6 @@ if(trade_sig != prev_sig):
             order_func(action, pair, volume,  volume2, stop_price, take_price)
             print('buy new')
         elif(trade_date == current_date and trade_sig == 'sell'):
-            close_open_func() # cancel open orders
             action = 'sell'
             pair = 'XETHZUSD'
             volume = volume_open # use volume from account
