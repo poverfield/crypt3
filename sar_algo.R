@@ -104,7 +104,7 @@ if(signal != nrow(dat)){
 
 # write out plot
 png(filename="plot.png")
-plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price', main = 'ETH Price and Historic Trades')
+plot(x = 1:nrow(dat), y = dat[,5], type = 'l', xlab = '30-min interval', ylab = 'ETH Price ($)', main = 'ETH Price and Historic Trades')
 lines(1:length(sar), y = sar, col = "grey")
 abline(v= buy, col = 3, lty = 2)
 abline(v = sell, col = 2, lty = 2)
