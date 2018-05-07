@@ -26,7 +26,7 @@ def kill_script():
     from crontab import CronTab
     my_cron = CronTab(user = 'pi') # open cron editor
     for job in my_cron:
-        if 'trade script ' in job.comment:
+        if 'trade script' in job.comment:
             job.enable(False)
             my_cron.write()    
 
