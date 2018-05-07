@@ -29,7 +29,7 @@ msg['From'] = sender
 msg['To'] = receiver
 file = 'trade_log.txt'
 
-msg.attach(MIMEText("Aggregated data."))
+msg.attach(MIMEText("Historic Trade log."))
 attachment = MIMEBase('application', 'octet-stream')
 attachment.set_payload(open(file, 'rb').read())
 encoders.encode_base64(attachment)
