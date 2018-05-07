@@ -20,7 +20,7 @@ os.chdir(path)
 
 # Stop loss
 stop_loss = .02
-take_profit = .09
+take_profit = .08
 
 # Read in account information
 f = open('account.txt') # read in account.txt
