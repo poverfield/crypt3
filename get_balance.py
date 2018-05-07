@@ -56,7 +56,7 @@ Additionally, no open positions are included in the 'Percent Change' value.'''
         message = 'Date: ' + now_date + '\n\n' + 'Account Balance: $' + str(usd) + '\n\n' + 'Percent Change: ' + str(delt) + ' %' + '\n\n\n' + 'Disclaimer: ' + disclaimer
     # if not new interval display new account balance
     else:
-        message = 'Date' + now_date + '\n\n' + 'New Account Balance: $' + str(usd) + '\n\n' + 'Note: This account balance will be used to calculate the following percent change value.'
+        message = 'Date: ' + now_date + '\n\n' + 'New Account Balance: $' + str(usd) + '\n\n' + 'Note: This account balance will be used to calculate the following percent change value.'
     msg.attach(MIMEText(message))
     s = server = smtplib.SMTP('smtp.gmail.com:587') #smtp.gmail.com:587
     s.starttls()
