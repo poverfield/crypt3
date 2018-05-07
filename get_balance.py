@@ -52,7 +52,7 @@ def send_email(usd,  delt):
 If there have been then this value is not correct.\n
 Additionally, no open positions are included in the 'Percent Change' value.'''
     # if new 15 day interval display percent change message
-    if '-01-' in now_date or '-16-' in now_date:
+    if '-01-' not in now_date and '-01' in now_date or '-16' in now_date:
         message = 'Date: ' + now_date + '\n\n' + 'Account Balance: $' + str(usd) + '\n\n' + 'Percent Change: ' + str(delt) + ' %' + '\n\n\n' + 'Disclaimer: ' + disclaimer
     # if not new interval display new account balance
     else:
