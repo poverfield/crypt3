@@ -38,7 +38,7 @@ def email_plot():
     msg['To'] = email_addr
     file = 'plot.png'
 
-    msg.attach(MIMEText("Ethereum prie chart."))
+    msg.attach(MIMEText("Ethereum price chart."))
     attachment = MIMEBase('application', 'octet-stream')
     attachment.set_payload(open(file, 'rb').read())
     encoders.encode_base64(attachment)
