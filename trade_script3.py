@@ -149,7 +149,17 @@ if(len(open_order['result']['open']) > 0):
     open_order_id = list(open_order['result']['open'])[0]
     prev_vol = open_order['result']['open'][open_order_id]['vol']
 
-
+# check if take-profit or stop-loss trade triggered
+if(len(open_order['result']['open']) == 1):
+    str_open_order = str(open_order)
+    if 'stop-loss' in str_open_order:
+        email_order('take profit (+' + str(take_profit*100) + '%).')
+        print('Closed take_profit')
+    elif 'take-profit' in str_open_order:
+        email_order('Stop loss (-' + str(stop_loss*100) + '%).')
+        print('Closed stop_loss')
+    
+    
 
 # Execute Trade
 if(trade_sig != prev_sig):
