@@ -45,7 +45,7 @@ def send_email(trade): # function with input 'buy/sell/close'
     now = str(datetime.datetime.now())
     now_date = now[0:16]
     
-    message = 'Time stamp: ' + now_date + '\n\n' + 'Action: ' + trade + '\n\n' + 'price: ' + str(current_price)
+    message = 'Time stamp: ' + now_date + '\n\n' + 'Action: ' + trade + '\n\n' + 'Price: ' + str(current_price)
     msg.attach(MIMEText(message))
     attachment = MIMEBase('application', 'octet-stream')
     attachment.set_payload(open(file, 'rb').read())
@@ -153,10 +153,10 @@ if(len(open_order['result']['open']) > 0):
 if(len(open_order['result']['open']) == 1):
     str_open_order = str(open_order)
     if 'stop-loss' in str_open_order:
-        email_order('take profit (+' + str(take_profit*100) + '%).')
+        send_email('Take Profit (+' + str(take_profit*100) + '%).')
         print('Closed take_profit')
     elif 'take-profit' in str_open_order:
-        email_order('Stop loss (-' + str(stop_loss*100) + '%).')
+        send_email('Stop Loss (-' + str(stop_loss*100) + '%).')
         print('Closed stop_loss')
     
     
