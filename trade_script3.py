@@ -141,7 +141,7 @@ k = krakenex.API(key = api_key, secret = api_secret)
 balance = k.query_private('Balance')
 balance = balance['result'] # clean 'balance'
 usd = float(balance['ZUSD'])
-volume_open = round(((usd*.8)/current_price),4)
+volume_open = round(((usd*.9)/current_price),4)
 
 # Get prev_volume from open position
 open_order = k.query_private('OpenOrders')
