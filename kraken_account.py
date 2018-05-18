@@ -10,6 +10,11 @@ from oauth2client.service_account import ServiceAccountCredentials
 import string
 import time
 import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 # Set working directory in raspberry
 path = '/home/pi/Desktop/files'
@@ -156,7 +161,33 @@ def update_sheet():
             wks.update_cells(cell_list)           
     print('Done.')
     
+# Email Function
+def email_csv():
+    sender = email
+    receiver = email
 
+    msg = MIMEMultipart()
+    msg['Subject'] = 'Updated Account Balance'
+    msg['From'] = sender
+    msg['To'] = receiver
+    file = 'k_account.csv'
+
+    now = str(datetime.datetime.now())
+    now_date = now[0:16]
+    
+    message = 'Time stamp: ' + now_date + '\n\n' + 'Updated account balance.'
+    msg.attach(MIMEText(message))
+    attachment = MIMEBase('application', 'octet-stream')
+    attachment.set_payload(open(file, 'rb').read())
+    encoders.encode_base64(attachment)
+    attachment.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(file))
+    msg.attach(attachment)
+    s = server = smtplib.SMTP('smtp.gmail.com:587') #smtp.gmail.com:587
+    s.starttls()
+    s.login(sender, password)
+    s.sendmail(sender, receiver, msg.as_string())
+    s.quit()
+    
 # read in k_account
 f = open('k_account.csv')
 f_reader = csv.reader(f)
@@ -183,6 +214,7 @@ print(I)
 # Run
 edit_I() # edit csv 
 update_sheet() # update google sheets
+email_csv() # email updated k_account.csv
 
     
 
