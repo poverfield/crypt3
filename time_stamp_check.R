@@ -27,6 +27,7 @@ df = matrix(data = df, ncol = 8, byrow = FALSE) # recreate data matrix
 colnames(df) = c("time","open","high","low","close","vwap","colume","count")
 df = df[,1:5]
 real_date = df[nrow(df)-1,1]
+real_price = df[nrow(df)-1,5]
 
 # if time stamps do not match up - write out interval_ALERT.csv
 if(current_date != real_date){
@@ -38,6 +39,14 @@ if(current_date != real_date){
   cat('\n')
   cat(paste('Algo time stamp:', current_date, sep = " "))
   sink()  
+  # write out new timestamp to current_price.txt
+  sink('current_price.txt')
+  cat(as.character(real_date))
+  cat('\n')
+  cat(real_price)
+  cat('\n')
+  sink()  
+  
 } else{
   print('Time stamps are equal')
 }
