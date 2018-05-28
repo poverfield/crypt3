@@ -24,11 +24,11 @@ dat.origin = df[,1:5]
 
 # write out final timestamp to current_price.txt
 sink('current_price.txt')
-cat(as.character(dat.origin[nrow(dat.origin),1]))
+cat(as.character(dat.origin[nrow(dat.origin)-1,1]))
 cat('\n')
-cat(dat.origin[nrow(dat.origin),5])
+cat(dat.origin[nrow(dat.origin)-1,5])
 cat('\n')
 sink()  
 
-print(dat.origin[nrow(dat.origin),1])
+print(dat.origin[nrow(dat.origin)-1,1])
 
