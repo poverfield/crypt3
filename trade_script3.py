@@ -70,7 +70,7 @@ def order_func(action, pair, volume, volume2, stop_price, take_price):
                                   'type': action,
                                   'ordertype': 'market',
                                   'volume': volume,
-                                  'leverage': '2:1'})
+                                  'leverage': '5:1'})
     time.sleep(2)
     order2 = k.query_private('AddOrder',
                                  {'pair': pair,
@@ -78,7 +78,7 @@ def order_func(action, pair, volume, volume2, stop_price, take_price):
                                   'ordertype': 'take-profit',
                                   'volume': volume2,
                                   'price': take_price,
-                                  'leverage': '2:1'})
+                                  'leverage': '5:1'})
     time.sleep(2)
     order3 = k.query_private('AddOrder',
                                  {'pair': pair,
@@ -86,7 +86,7 @@ def order_func(action, pair, volume, volume2, stop_price, take_price):
                                   'ordertype': 'stop-loss',
                                   'volume': volume2,
                                   'price': stop_price,
-                                  'leverage': '2:1'})                           
+                                  'leverage': '5:1'})                           
     print('trade complete.')
     # send email
     send_email(action)
